@@ -30,18 +30,40 @@ injectGlobal`
     animation-name: fade;
     animation-duration: 2s;
   }
-`
+  `
 
 const Heading = styled.h2`
   text-align: center;
   font-size: 20px;
 `
 
-const Image = styled.img`
-  display: block;
-  width: 80%;
-  margin: 20px auto;
+const LazyImage = styled.div`
+  position: relative;
   min-height: 500px; /* 최소 높이를 지정하지 않으면 엘레멘트가 모두 viewport 안에 들어온 것으로 인식해버려 lazy load를 할 수 없다. */
+  width: calc(100% - 2rem);
+  margin: 20px auto;
+
+  & > img {
+    display: block;
+    width: 100%;
+
+    &.loaded + .loading-layer {
+      display: none;
+    }
+  }
+`
+
+const LoadingLayer = styled.div.attrs({
+  className: 'loading-layer',
+})`
+  position: absolute;
+  content: ' ';
+  width: 100%;
+  height: 100%;
+  background-color: #efefef;
+  z-index: 1;
+  top: 0;
+  left: 0;
 `
 
 type Props = {}
@@ -78,20 +100,24 @@ class Home extends React.Component {
       'https://images.unsplash.com/photo-1425678013935-cafcfb4272c7?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=fb973d234435bb7393c4ac59cf7d6c04',
     ]
 
-    // this.observer = window.lozad()
+    this.initOserver()
+  }
+
+  componentDidMount() {
+    this.observer.observe()
+  }
+
+  initOserver() {
     this.observer = window.lozad('.lozad', {
       load: function(el) {
         el.src = el.dataset.src
         el.onload = function() {
           el.classList.add('fade')
+          el.classList.add('loaded')
           console.log('element loaded', el)
         }
       },
     })
-  }
-
-  componentDidMount() {
-    this.observer.observe()
   }
 
   render() {
@@ -100,7 +126,10 @@ class Home extends React.Component {
         <Header />
         <Main>
           {this.images.map((src, i) =>
-            <Image key={i} className="lozad" data-src={src} />
+            <LazyImage>
+              <img key={i} className="lozad" data-src={src} alt={i} />
+              <LoadingLayer />
+            </LazyImage>
           )}
 
           <Heading>
