@@ -42,7 +42,7 @@ const Heading = styled.h2`
 
 const LazyImage = styled.div`
   position: relative;
-  min-height: 500px; /* 최소 높이를 지정하지 않으면 엘레멘트가 모두 viewport 안에 들어온 것으로 인식해버려 lazy load를 할 수 없다. */
+  min-height: 300px; /* 최소 높이를 지정하지 않으면 엘레멘트가 모두 viewport 안에 들어온 것으로 인식해버려 lazy load를 할 수 없다. */
   width: calc(100% - 2rem);
   margin: 20px auto;
 
@@ -118,6 +118,7 @@ class Home extends React.Component {
 
   initOserver() {
     this.observer = window.lozad('.lozad', {
+      rootMargin: '10% 0px',
       load: (el: HTMLElement) => {
         el.src = el.dataset.src
         el.onload = () => {

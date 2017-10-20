@@ -6,7 +6,7 @@
     "precommit": "lint-staged",
     "dev": "npm run start",
     "start": "REACT_APP_ENV=development PORT=3000 react-scripts start",
-    "deploy": "npm run deploy:test",
+    "deploy": "npm run deploy:prod",
     "deploy:test": "npm run build:test && npm run upload",
     "deploy:prod": "npm run build:prod && npm run upload",
     "build": "sh -ac '. .env.${REACT_APP_ENV}; react-scripts build'",
