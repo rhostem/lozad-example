@@ -7,7 +7,7 @@ import { AppContainer } from 'react-hot-loader'
 import 'whatwg-fetch'
 import Root from './Root'
 import './styles/global' // inject global style
-
+require('intersection-observer')
 require('react-hot-loader/patch')
 
 // Needed for onTouchTap

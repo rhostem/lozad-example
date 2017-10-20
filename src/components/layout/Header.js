@@ -28,9 +28,7 @@ const Title = styled.h1`
 const Header = () => {
   return (
     <HeaderBar>
-      <Title>
-        {process.env.REACT_APP_SITE_TITLE}
-      </Title>
+      <Title>Lazy image loading example with lozad.js</Title>
     </HeaderBar>
   )
 }

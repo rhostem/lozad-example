@@ -6,6 +6,8 @@ import Header from '../components/layout/Header'
 import styles from '../styles'
 import styled from 'styled-components'
 import { injectGlobal } from 'styled-components'
+import ToastContainer from '../components/ToastContainer'
+import { showToastMessage } from '../actions/toast'
 
 const Main = styled.div`
   position: relative;
@@ -35,6 +37,7 @@ injectGlobal`
 const Heading = styled.h2`
   text-align: center;
   font-size: 20px;
+  margin: 0rem 0 3rem;
 `
 
 const LazyImage = styled.div`
@@ -64,6 +67,12 @@ const LoadingLayer = styled.div.attrs({
   z-index: 1;
   top: 0;
   left: 0;
+`
+
+const IndexNo = styled.div`
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.2rem;
 `
 
 type Props = {}
@@ -109,12 +118,16 @@ class Home extends React.Component {
 
   initOserver() {
     this.observer = window.lozad('.lozad', {
-      load: function(el) {
+      load: (el: HTMLElement) => {
         el.src = el.dataset.src
-        el.onload = function() {
+        el.onload = () => {
           el.classList.add('fade')
           el.classList.add('loaded')
-          console.log('element loaded', el)
+
+          this.props.showToastMessage({
+            title: 'Image Loaded',
+            content: el.getAttribute('data-index'),
+          })
         }
       },
     })
@@ -123,23 +136,52 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <Header />
         <Main>
+          <ToastContainer />
+          <Heading>
+            <p>
+              Lazy image loading example with{' '}
+              <a
+                href="https://www.npmjs.com/package/lozad"
+                rel="noopener noreferrer"
+                target="_blank">
+                lozad.js
+              </a>
+            </p>
+            <p>
+              All photos are come from&nbsp;
+              <a
+                href="https://unsplash.com/"
+                rel="noopener noreferrer"
+                target="_blank">
+                unsplash
+              </a>
+            </p>
+          </Heading>
           {this.images.map((src, i) =>
-            <LazyImage>
-              <img key={i} className="lozad" data-src={src} alt={i} />
+            <LazyImage key={i}>
+              <IndexNo>
+                {i + 1}
+              </IndexNo>
+              <img
+                data-index={i + 1}
+                className="lozad"
+                data-src={src}
+                alt={i}
+              />
               <LoadingLayer />
             </LazyImage>
           )}
 
           <Heading>
-            All photos are come from&nbsp;
-            <a
-              href="https://unsplash.com/"
-              rel="noopener noreferrer"
-              target="_blank">
-              unsplash
-            </a>
+            <p>
+              <a
+                href="https://rhostem.github.io"
+                rel="noopener noreferrer"
+                target="_blank">
+                rhostem.github.io
+              </a>
+            </p>
           </Heading>
         </Main>
       </div>
@@ -154,8 +196,10 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch: Function) =>
   bindActionCreators(
     Object.assign(
-      {}
-      // actions,
+      {},
+      {
+        showToastMessage,
+      }
     ),
     dispatch
   )

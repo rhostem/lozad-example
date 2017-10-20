@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux-immutable'
 import { routerReducer } from 'react-router-redux'
-import data from './data'
+import toast from './toast'
 
 const rootReducer = combineReducers({
   router: routerReducer,
-  data,
+  toast,
 })
 
 export default rootReducer

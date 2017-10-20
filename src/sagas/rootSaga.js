@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects'
-import data from './data'
+import toast from './toast'
 
 // single entry point to start all Sagas at once
 export default function* rootSaga() {
-  yield all([data()])
+  yield all([toast()])
 }

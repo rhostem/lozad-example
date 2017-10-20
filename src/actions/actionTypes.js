@@ -1,5 +1,5 @@
-import * as data from './data/types'
+import * as toast from './toast/types'
 
 export default {
-  ...data,
+  ...toast,
 }
